@@ -1,31 +1,51 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Random;
+import java.awt.event.ActionListener;
 
 public class PizzaGUIFrame extends JFrame {
     JPanel mainPnl;
-    JPanel iconPnl;  // Top
-    JPanel displayPnl; // Center
+    JPanel pizzaOrderPnl;  // Top
+    JPanel orderDisplayPnl; // Center
     JPanel controlPnl; // Bottom
+
+    JPanel radioButtonsPnl;
 
     JTextArea displayTA;
     JScrollPane scroller;
 
     JLabel titleLbl;
-    ImageIcon icon;
 
-    JButton fortuneBtn;
+    JButton createOrderBtn;
+
+    JRadioButton thinCrust;
+    JRadioButton regularCrust;
+    JRadioButton deepDishCrust;
+    ButtonGroup buttonGroup;
+
+    String crustType = "";
+
+    JComboBox pizzaSizeCmbBx;
+    String[] pizzaSize = {"Small", "Medium", "Large", "Super"};
+    String selectedPizzaSize = "";
+
+    JCheckBox extraCheeseCb;
+    boolean extraCheese = false;
+    JCheckBox noPepperoniCb;
+    boolean noPepperoni = false;
+    JCheckBox pineappleChkBx;
+    boolean pineapple = false;
+    JCheckBox mamasSauceCb;
+    boolean mamasSauce = false;
+    JCheckBox stuffedCrustCb;
+    boolean stuffedCrust = false;
+    JCheckBox sausageCb;
+    boolean sausage = false;
+
+
+
 
     JButton quitBtn;
-
-
-    Random rnd = new Random();
-    int previousFortune = 14;
-    int currentFortune = 0;
-    ArrayList<String> fortunes = new ArrayList<>();
-
 
 
     public PizzaGUIFrame()
@@ -38,33 +58,14 @@ public class PizzaGUIFrame extends JFrame {
 // center frame in screen
 
 
-        fortunes.add("You will experience a kernel panic in the middle of something important this year.");
-        fortunes.add("You will encounter an unexpected EOF while reading a fortune.");
-        fortunes.add("Tomorrow, your code will compile with zero warnings and errors.");
-        fortunes.add("A wild bug will appear in production, but you shall catch it swiftly.");
-        fortunes.add("Your favorite framework will receive a major update—brace yourself!");
-        fortunes.add("You will master the art of writing documentation that others will actually read.");
-        fortunes.add("Beware of off-by-one errors lurking in your loops.");
-        fortunes.add("You will experience a merge conflict of epic proportions.");
-        fortunes.add("The next commit message you write will be worthy of a legend.");
-        fortunes.add("Your future holds a never-ending while(true) loop of success.");
-        fortunes.add("One day, your code will be so elegant that even Linus Torvalds will applaud.");
-        fortunes.add("The Stack Overflow fairy will grant you the perfect answer to your toughest question.");
-        fortunes.add("Your next refactor will reduce your codebase by 50% and increase readability by 200%.");
-
-
-
-
-
-
         mainPnl = new JPanel();
         mainPnl.setLayout(new BorderLayout());
 
-        createIconPanel();
-        mainPnl.add(iconPnl, BorderLayout.NORTH);
+        createPizzaOrderPanel();
+        mainPnl.add(pizzaOrderPnl, BorderLayout.WEST);
 
-        createDisplayPanel();
-        mainPnl.add(displayPnl, BorderLayout.CENTER);
+        createOrderDisplayPanel();
+        mainPnl.add(orderDisplayPnl, BorderLayout.EAST);
 
         createControlPanel();
         mainPnl.add(controlPnl, BorderLayout.SOUTH);
@@ -78,29 +79,82 @@ public class PizzaGUIFrame extends JFrame {
         setVisible(true);
     }
 
-    private void createIconPanel()
+    private void createPizzaOrderPanel()
     {
-        iconPnl = new JPanel();
-        icon = new ImageIcon("src/Wizard.png");
-        titleLbl = new JLabel("Welcome to The Gundam Fortune Teller", icon, JLabel.CENTER);
+
+        pizzaOrderPnl = new JPanel();
+        pizzaOrderPnl.setLayout(new GridLayout(4, 1));
+//        icon = new ImageIcon("src/Wizard.png");
+        titleLbl = new JLabel("Order a Pizza", JLabel.CENTER);
         titleLbl.setFont(new Font("Ubuntu", Font.PLAIN, 36));
+
+        radioButtonsPnl = new JPanel();
+        radioButtonsPnl.setLayout(new GridLayout(1, 3));
+        thinCrust = new JRadioButton("Thin Crust");
+        regularCrust = new JRadioButton("Regular Crust");
+        deepDishCrust = new JRadioButton("Deep-Dish Crust");
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(thinCrust);
+        buttonGroup.add(regularCrust);
+        buttonGroup.add(deepDishCrust);
+
+
+        thinCrust.setBounds(50,50,100,30);
+        regularCrust.setBounds(50,80,100,30);
+        deepDishCrust.setBounds(50,110,100,30);
+
+        thinCrust.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                crustType = thinCrust.getText();
+                System.out.println(crustType);
+            }
+        });
+        regularCrust.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                crustType = regularCrust.getText();
+                System.out.println(crustType);
+            }
+        });
+        deepDishCrust.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                crustType = deepDishCrust.getText();
+                System.out.println(crustType);
+            }
+        });
+
+        radioButtonsPnl.add(thinCrust);
+        radioButtonsPnl.add(regularCrust);
+        radioButtonsPnl.add(deepDishCrust);
+
+        pizzaSizeCmbBx = new JComboBox<>(pizzaSize);
+        pizzaSizeCmbBx.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Get the selected item and update the label
+                selectedPizzaSize = (String) pizzaSizeCmbBx.getSelectedItem();
+                System.out.println(selectedPizzaSize);
+            }
+        });
+
+
         // Obscure code to align the text to the Icon!
         titleLbl.setVerticalTextPosition(JLabel.BOTTOM);
         titleLbl.setHorizontalTextPosition(JLabel.CENTER);
 
-        iconPnl.add(titleLbl);
+        pizzaOrderPnl.add(titleLbl);
+        pizzaOrderPnl.add(radioButtonsPnl);
+        pizzaOrderPnl.add(pizzaSizeCmbBx);
     }
 
-    private void createDisplayPanel()
+    private void createOrderDisplayPanel()
     {
-        displayPnl = new JPanel();
+        orderDisplayPnl = new JPanel();
         displayTA = new JTextArea(10, 86);
         displayTA.setFont(new Font("Ubuntu Mono", Font.PLAIN, 15));
 
 
         displayTA.setEditable(false);
         scroller = new JScrollPane(displayTA);
-        displayPnl.add(scroller);
+        orderDisplayPnl.add(scroller);
     }
 
 
@@ -109,17 +163,18 @@ public class PizzaGUIFrame extends JFrame {
         controlPnl = new JPanel();
         controlPnl.setLayout(new GridLayout(1, 4));
 
-        fortuneBtn = new JButton("Read My Fortune!");
-        fortuneBtn.setFont(new Font("Ubuntu Bold", Font.PLAIN, 20));
-        fortuneBtn.addActionListener((ActionEvent ae) ->
+        createOrderBtn = new JButton("Read My Fortune!");
+        createOrderBtn.setFont(new Font("Ubuntu Bold", Font.PLAIN, 20));
+        createOrderBtn.addActionListener((ActionEvent ae) ->
         {
-            currentFortune = rnd.nextInt(fortunes.size());
-            do {
-                currentFortune = rnd.nextInt(fortunes.size());
-            }while (currentFortune == previousFortune);
-
-            displayTA.append(fortunes.get(currentFortune) + "\n");
-            previousFortune = currentFortune;
+//            currentFortune = rnd.nextInt(fortunes.size());
+//            do {
+//                currentFortune = rnd.nextInt(fortunes.size());
+//            }while (currentFortune == previousFortune);
+//
+//            displayTA.append(fortunes.get(currentFortune) + "\n");
+//            previousFortune = currentFortune;
+            displayTA.append("You are reading a message!\n");
         });
 
 
@@ -127,7 +182,7 @@ public class PizzaGUIFrame extends JFrame {
         quitBtn.setFont(new Font("Ubuntu Thin", Font.PLAIN, 20));
         quitBtn.addActionListener((ActionEvent ae) -> System.exit(0));
 
-        controlPnl.add(fortuneBtn);
+        controlPnl.add(createOrderBtn);
         controlPnl.add(quitBtn);
 
     }
