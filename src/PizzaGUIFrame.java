@@ -1,22 +1,31 @@
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.DecimalFormat;
 
 public class PizzaGUIFrame extends JFrame {
     JPanel mainPnl;
     JPanel pizzaOrderPnl;  // Top
     JPanel orderDisplayPnl; // Center
     JPanel controlPnl; // Bottom
+    JPanel fixmentPnl;
 
     JPanel radioButtonsPnl;
 
     JTextArea displayTA;
     JScrollPane scroller;
 
-    JLabel titleLbl;
+//    JLabel titleLbl;
 
     JButton createOrderBtn;
+    JButton clearOrderBtn;
 
     JRadioButton thinCrust;
     JRadioButton regularCrust;
@@ -27,7 +36,7 @@ public class PizzaGUIFrame extends JFrame {
 
     JComboBox pizzaSizeCmbBx;
     String[] pizzaSize = {"Small", "Medium", "Large", "Super"};
-    String selectedPizzaSize = "";
+    String selectedPizzaSize = "Small";
 
     JCheckBox extraCheeseCb;
     boolean extraCheese = false;
@@ -42,7 +51,9 @@ public class PizzaGUIFrame extends JFrame {
     JCheckBox sausageCb;
     boolean sausage = false;
 
+    JPanel checkBtns;
 
+//dev
 
 
     JButton quitBtn;
@@ -62,10 +73,10 @@ public class PizzaGUIFrame extends JFrame {
         mainPnl.setLayout(new BorderLayout());
 
         createPizzaOrderPanel();
-        mainPnl.add(pizzaOrderPnl, BorderLayout.WEST);
+        mainPnl.add(pizzaOrderPnl, BorderLayout.NORTH);
 
         createOrderDisplayPanel();
-        mainPnl.add(orderDisplayPnl, BorderLayout.EAST);
+        mainPnl.add(orderDisplayPnl, BorderLayout.CENTER);
 
         createControlPanel();
         mainPnl.add(controlPnl, BorderLayout.SOUTH);
@@ -83,10 +94,8 @@ public class PizzaGUIFrame extends JFrame {
     {
 
         pizzaOrderPnl = new JPanel();
-        pizzaOrderPnl.setLayout(new GridLayout(4, 1));
-//        icon = new ImageIcon("src/Wizard.png");
-        titleLbl = new JLabel("Order a Pizza", JLabel.CENTER);
-        titleLbl.setFont(new Font("Ubuntu", Font.PLAIN, 36));
+        pizzaOrderPnl.setLayout(new GridLayout(3, 1));
+
 
         radioButtonsPnl = new JPanel();
         radioButtonsPnl.setLayout(new GridLayout(1, 3));
@@ -106,19 +115,19 @@ public class PizzaGUIFrame extends JFrame {
         thinCrust.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 crustType = thinCrust.getText();
-                System.out.println(crustType);
+//                System.out.println(crustType);
             }
         });
         regularCrust.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 crustType = regularCrust.getText();
-                System.out.println(crustType);
+//                System.out.println(crustType);
             }
         });
         deepDishCrust.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 crustType = deepDishCrust.getText();
-                System.out.println(crustType);
+//                System.out.println(crustType);
             }
         });
 
@@ -129,32 +138,94 @@ public class PizzaGUIFrame extends JFrame {
         pizzaSizeCmbBx = new JComboBox<>(pizzaSize);
         pizzaSizeCmbBx.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Get the selected item and update the label
                 selectedPizzaSize = (String) pizzaSizeCmbBx.getSelectedItem();
-                System.out.println(selectedPizzaSize);
+//                System.out.println(selectedPizzaSize);
             }
         });
 
 
-        // Obscure code to align the text to the Icon!
-        titleLbl.setVerticalTextPosition(JLabel.BOTTOM);
-        titleLbl.setHorizontalTextPosition(JLabel.CENTER);
 
-        pizzaOrderPnl.add(titleLbl);
+        checkBtns = new JPanel();
+        checkBtns.setLayout(new GridLayout(2, 3));
+        extraCheeseCb = new JCheckBox("Extra Cheese");
+        extraCheeseCb.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                extraCheese = e.getStateChange() == ItemEvent.SELECTED;
+            }
+        });
+        noPepperoniCb = new JCheckBox("No Pepperoni");
+        noPepperoniCb.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                noPepperoni = e.getStateChange() == ItemEvent.SELECTED;
+            }
+        });
+        pineappleChkBx = new JCheckBox("Pineapple");
+        pineappleChkBx.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                pineapple = e.getStateChange() == ItemEvent.SELECTED;
+            }
+        });
+        mamasSauceCb = new JCheckBox("Mamas Sauce");
+        mamasSauceCb.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                mamasSauce = e.getStateChange() == ItemEvent.SELECTED;
+            }
+        });
+        stuffedCrustCb = new JCheckBox("Stuffed Crust");
+        stuffedCrustCb.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                stuffedCrust = e.getStateChange() == ItemEvent.SELECTED;
+            }
+        });
+        sausageCb = new JCheckBox("Sausage");
+        sausageCb.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                sausage = e.getStateChange() == ItemEvent.SELECTED;
+            }
+        });
+
+
+
+        checkBtns.add(extraCheeseCb);
+        checkBtns.add(noPepperoniCb);
+        checkBtns.add(pineappleChkBx);
+        checkBtns.add(mamasSauceCb);
+        checkBtns.add(stuffedCrustCb);
+        checkBtns.add(sausageCb);
+
+
+
         pizzaOrderPnl.add(radioButtonsPnl);
         pizzaOrderPnl.add(pizzaSizeCmbBx);
+        pizzaOrderPnl.add(checkBtns);
+
+        int boarderPadding = 10;
+        EmptyBorder paddingBorder = new EmptyBorder(boarderPadding, boarderPadding, boarderPadding, boarderPadding);
+        LineBorder lineBorder = new LineBorder(Color.BLACK);
+        CompoundBorder compoundBorder = new CompoundBorder(lineBorder, paddingBorder);
+        EmptyBorder outerPadding = new EmptyBorder(boarderPadding, boarderPadding, boarderPadding, boarderPadding);
+        CompoundBorder compoundBorder2 = new CompoundBorder(outerPadding, compoundBorder);
+
+        TitledBorder titledBorder = new TitledBorder(compoundBorder2, "Order a Pizza", TitledBorder.CENTER, TitledBorder.TOP);
+        titledBorder.setTitleFont(new Font("Ubuntu", Font.BOLD, 20));  // Optional: Set title font style
+
+        pizzaOrderPnl.setBorder(titledBorder);
     }
 
     private void createOrderDisplayPanel()
     {
         orderDisplayPnl = new JPanel();
-        displayTA = new JTextArea(10, 86);
+        fixmentPnl = new JPanel();
+        displayTA = new JTextArea(20, 42);
         displayTA.setFont(new Font("Ubuntu Mono", Font.PLAIN, 15));
 
 
         displayTA.setEditable(false);
         scroller = new JScrollPane(displayTA);
-        orderDisplayPnl.add(scroller);
+
+        fixmentPnl.add(scroller);
+        orderDisplayPnl.add(fixmentPnl);
+
     }
 
 
@@ -163,27 +234,158 @@ public class PizzaGUIFrame extends JFrame {
         controlPnl = new JPanel();
         controlPnl.setLayout(new GridLayout(1, 4));
 
-        createOrderBtn = new JButton("Read My Fortune!");
+        createOrderBtn = new JButton("Order!");
         createOrderBtn.setFont(new Font("Ubuntu Bold", Font.PLAIN, 20));
         createOrderBtn.addActionListener((ActionEvent ae) ->
         {
-//            currentFortune = rnd.nextInt(fortunes.size());
-//            do {
-//                currentFortune = rnd.nextInt(fortunes.size());
-//            }while (currentFortune == previousFortune);
-//
-//            displayTA.append(fortunes.get(currentFortune) + "\n");
-//            previousFortune = currentFortune;
-            displayTA.append("You are reading a message!\n");
+            String output = CreateOrder(crustType, selectedPizzaSize, extraCheese, noPepperoni, pineapple, mamasSauce, stuffedCrust, sausage);
+            displayTA.setText(output);
+            System.out.println(output);
+        });
+
+        clearOrderBtn = new JButton("Clear Order");
+        clearOrderBtn.setFont(new Font("Ubuntu", Font.PLAIN, 20));
+        clearOrderBtn.addActionListener((ActionEvent ae) -> {
+            displayTA.setText(""); // Clear text area
+            buttonGroup.clearSelection(); // Deselect radio buttons
+            pizzaSizeCmbBx.setSelectedIndex(0); // Reset combo box
+            extraCheeseCb.setSelected(false);
+            noPepperoniCb.setSelected(false);
+            pineappleChkBx.setSelected(false);
+            mamasSauceCb.setSelected(false);
+            stuffedCrustCb.setSelected(false);
+            sausageCb.setSelected(false);
+
+            // Reset values
+            crustType = "";
+            selectedPizzaSize = "Small";
+            extraCheese = false;
+            noPepperoni = false;
+            pineapple = false;
+            mamasSauce = false;
+            stuffedCrust = false;
+            sausage = false;
         });
 
 
         quitBtn = new JButton("Quit!");
         quitBtn.setFont(new Font("Ubuntu Thin", Font.PLAIN, 20));
-        quitBtn.addActionListener((ActionEvent ae) -> System.exit(0));
+        quitBtn.addActionListener((ActionEvent ae) -> {
+            int response = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to quit?",
+                    "Confirm Exit",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+            if (response == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        });
+
+
+
 
         controlPnl.add(createOrderBtn);
+        controlPnl.add(clearOrderBtn);
         controlPnl.add(quitBtn);
 
     }
+
+
+    private String CreateOrder(String crustTypeIn, String selectedPizzaSizeIn, boolean extraCheeseIn, boolean noPepperoniIn, boolean pineappleIn, boolean mamasSauceIn, boolean stuffedCrustIn, boolean sausageIn){
+        double pizzaSizeCost;
+        double total;
+        double tax;
+        double taxRate = 0.07;
+        if(selectedPizzaSizeIn.equals("Small")){
+            pizzaSizeCost = 8.00;
+        } else if(selectedPizzaSizeIn.equals("Medium")){
+            pizzaSizeCost = 12.00;
+        } else if(selectedPizzaSizeIn.equals("Large")){
+            pizzaSizeCost = 16.00;
+        } else if(selectedPizzaSizeIn.equals("Super")){
+            pizzaSizeCost = 20.00;
+        } else {
+            pizzaSizeCost = 0.00;
+            System.out.println(selectedPizzaSizeIn + " is not a valid pizza size");
+        }
+
+        String crustTypeOut ="";
+        if (crustTypeIn.equals("Thin Crust")){
+            crustTypeOut = "Thin Crust     ";
+        } else if(crustTypeIn.equals("Regular Crust")){
+            crustTypeOut = "Regular Crust  ";
+        } else if(crustTypeIn.equals("Deep-Dish Crust")){
+            crustTypeOut = "Deep Dish Crust";
+        } else {
+            crustTypeOut = "";
+            System.out.println(crustTypeIn + "is not a valid crust type");
+        }
+
+
+        String ingredientsOut = "";
+        double ingredientsCost = 0.00;
+        if (extraCheeseIn){
+            ingredientsOut += "Extra Cheese                 Price: $1.00\n";
+            ingredientsCost = ingredientsCost + 1.00;
+        }
+        if (noPepperoniIn){
+            ingredientsOut += "No Pepperoni                 Price: $1.00\n";
+            ingredientsCost = ingredientsCost + 1.00;
+        }
+        if (pineappleIn){
+            ingredientsOut += "Pineapple                    Price: $1.00\n";
+            ingredientsCost = ingredientsCost + 1.00;
+
+        }
+        if (mamasSauceIn){
+            ingredientsOut += "Mamas Sauce                  Price: $1.00\n";
+            ingredientsCost = ingredientsCost + 1.00;
+        }
+        if (stuffedCrustIn){
+            ingredientsOut += "Stuffed Crust                Price: $1.00\n";
+            ingredientsCost = ingredientsCost + 1.00;
+        }
+        if (sausageIn){
+            ingredientsOut += "Sausage                      Price: $1.00\n";
+            ingredientsCost = ingredientsCost + 1.00;
+        }
+
+
+
+
+        String returnString = "";
+        String spaces = "";
+        if (selectedPizzaSizeIn.equals("Small")){
+            spaces += "  ";
+        } else if (!selectedPizzaSizeIn.equals("Medium")){
+            spaces = " ";
+        }
+        String crustType = selectedPizzaSizeIn + " " + crustTypeOut + spaces + "      Price: $" + pizzaSizeCost + "0";
+
+        spaces = "";
+        if (selectedPizzaSizeIn.equals("Small") && ingredientsCost == 0){
+            spaces += " ";
+        }
+        total = pizzaSizeCost + ingredientsCost;
+        tax = total * taxRate;
+        DecimalFormat df = new DecimalFormat("#.##");
+        double taxFixed  = Double.parseDouble(df.format(tax));
+        double superTotal = total + taxFixed;
+        returnString += "=========================================\n";
+        returnString += crustType + "\n";
+        returnString += ingredientsOut + "\n";
+        returnString += "Sub-Total                          $" + spaces+ total + "0\n";
+        returnString += "Tax                                 $" + taxFixed + "\n";
+        returnString += "-----------------------------------------\n";
+        returnString += "Total                              $" + spaces + superTotal + "\n";
+        returnString += "=========================================\n";
+
+
+
+
+        return returnString;
+    };
+
 }
